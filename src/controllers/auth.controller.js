@@ -1,4 +1,5 @@
-const userModel = require("../models/auth.model.js");
+const userModel = require("../models/user.model.js");
+const foodPartnerModel = require("../models/partner.model.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -89,4 +90,91 @@ function logoutUser(req, res){
   })
 }
 
-module.exports = { registerUser, loginUser, logoutUser };
+async function registerFoodPartner(req, res) {
+  const { fullName, email, password } = req.body;
+
+  const isFoodPartnerExist = await foodPartnerModel.findOne({
+    email,
+  });
+
+  if (isFoodPartnerExist) {
+    return res.status(400).json({
+      message: "FoodPartner already exists. Try new email...",
+    });
+  }
+
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  const foodPartner = await foodPartnerModel.create({
+    fullName,
+    email,
+    password: hashPassword,
+  });
+
+  const token = jwt.sign(
+    {
+      id: foodPartner._id,
+    },
+    process.env.JWT_TOKEN
+  );
+
+  res.cookie("token", token);
+
+  res.status(201).json({
+    message: "FoodPartner registered successfully",
+    foodPartner: {
+      id: foodPartner._id,
+      fullName: foodPartner.fullName,
+      email: foodPartner.email,
+    },
+  });
+}
+
+async function loginFoodPartner(req, res) {
+  const { email, password } = req.body;
+
+  const foodPartner = await foodPartnerModel.findOne({
+    email,
+  });
+
+  if (!foodPartner) {
+    return res.status(400).json({
+      message: "Invalid foodPartner or password",
+    });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, foodPartner.password);
+
+  if (!isPasswordValid) {
+    return res.status(400).json({
+      message: "Invalid foodPartner or password",
+    });
+  }
+
+  const token = jwt.sign(
+    {
+      id: foodPartner._id,
+    },
+    process.env.JWT_TOKEN
+  );
+
+  res.cookie("token", token);
+
+  res.status(201).json({
+    message: "FoodPartner logged in successfully",
+    foodPartner: {
+      id: foodPartner._id,
+      fullName: foodPartner.fullName,
+      email: foodPartner.email,
+    },
+  });
+}
+
+function logoutFoodPartner(req, res){
+  res.clearCookie('token');
+  res.status(201).json({
+    message: "Logged out successfully"
+  })
+}
+
+module.exports = { registerUser, loginUser, logoutUser, registerFoodPartner, loginFoodPartner, logoutFoodPartner };
