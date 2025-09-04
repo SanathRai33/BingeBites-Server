@@ -3,13 +3,13 @@ const router = express.Router();
 const { registerUser, loginUser, logoutUser, registerFoodPartner, loginFoodPartner, logoutFoodPartner } = require('../controllers/auth.controller.js')
 
 // User authentication
-router.post("/register", registerUser)
-router.post("/login", loginUser)
-router.get("/logout", logoutUser)
+router.post("/user/register", registerUser)
+router.post("/user/login", loginUser)
+router.get("/user/logout", logoutUser)
 
 // Food Partner authentication
-router.post("/register", registerFoodPartner)
-router.post("/login", loginFoodPartner)
-router.get("/logout", logoutFoodPartner)
+router.post("/foodPartner/register", registerFoodPartner)
+router.post("/foodPartner/login", loginFoodPartner)
+router.get("/foodPartner/logout", logoutFoodPartner)
 
 module.exports = router;

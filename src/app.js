@@ -10,6 +10,6 @@ app.get("/", (req, res)=>{
     res.send("Hello world")
 })
 
-app.use('/api/user', authRoutes);
+app.use('/api/auth', authRoutes);
 
 module.exports = app;
