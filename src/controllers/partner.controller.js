@@ -1,4 +1,4 @@
-const foodPartnerModel = require('../models/foodPartner.model.js');
+const foodPartnerModel = require('../models/partner.model.js');
 
 const getFoodPartnerById = async (req, res) => {
     try {
