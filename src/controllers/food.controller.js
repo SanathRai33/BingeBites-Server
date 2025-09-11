@@ -67,4 +67,34 @@ async function likeFood(req, res) {
   });
 }
 
-module.exports = { createFood, getFoodItems, likeFood };
+async function saveFood(req, res) {
+  const { foodId } = req.body;
+  const user = req.user;
+
+  const isSaved = await saveModel.findOne({
+    user: req.user._id,
+    food: foodId,
+  });
+
+  if (isSaved) {
+    await saveModel.deleteOne({
+      user: req.user._id,
+      food: foodId,
+    });
+
+    return res.status(200).json({
+      message: "Food item unsaved",
+    });
+  }
+
+  const savedFood = await saveModel.create({
+    user: req.user._id,
+    food: foodId,
+  });
+  res.status(201).json({
+    message: "Food item saved",
+    savedFood,
+  });
+}
+
+module.exports = { createFood, getFoodItems, likeFood, saveFood };
