@@ -1,5 +1,7 @@
 const foodModel = require("../models/food.model.js");
 const likeModel = require("../models/like.model.js");
+const saveModel = require("../models/save.model.js");
+const foodPartnerModel = require("../models/partner.model.js");
 const { uploadFile } = require("../services/storage.service.js");
 const { v4: uuid } = require("uuid");
 
@@ -21,10 +23,16 @@ async function createFood(req, res) {
 
 async function getFoodItems(req, res) {
   const foodItems = await foodModel.find({});
+  const partnerId = await foodItems.foodPartner;
+  const partnerName = await foodPartnerModel.find(
+    { partnerId },
+    { name: 1, _id: 0 }
+  );
 
   res.status(200).json({
     message: "Food items fetched successfully",
     foodItems,
+    partnerName,
   });
 }
 
@@ -33,13 +41,13 @@ async function likeFood(req, res) {
   const user = req.user;
 
   const isLiked = await likeModel.findOne({
-    user: req.user._id,
+    user: user,
     food: foodId,
   });
 
   if (isLiked) {
     await likeModel.deleteOne({
-      user: req.user._id,
+      user: user,
       food: foodId,
     });
     await foodModel.findByIdAndUpdate(foodId, {
@@ -49,11 +57,12 @@ async function likeFood(req, res) {
     return res.status(200).json({
       message: "Food item unliked",
       likes: (await foodModel.findById(foodId)).likes,
+      status: false,
     });
   }
 
   const likedFood = await likeModel.create({
-    user: req.user._id,
+    user: user,
     food: foodId,
   });
 
@@ -63,7 +72,9 @@ async function likeFood(req, res) {
 
   res.status(201).json({
     message: "Food item liked",
-    likes: likeFood,
+    likes: likedFood,
+    totalLikes: foodItem.likes + 1,
+    status: true,
   });
 }
 
@@ -72,28 +83,30 @@ async function saveFood(req, res) {
   const user = req.user;
 
   const isSaved = await saveModel.findOne({
-    user: req.user._id,
+    user: user,
     food: foodId,
   });
 
   if (isSaved) {
     await saveModel.deleteOne({
-      user: req.user._id,
+      user: user,
       food: foodId,
     });
 
     return res.status(200).json({
       message: "Food item unsaved",
+      status: false,
     });
   }
 
   const savedFood = await saveModel.create({
-    user: req.user._id,
+    user: user,
     food: foodId,
   });
   res.status(201).json({
     message: "Food item saved",
     savedFood,
+    status: true,
   });
 }
 
