@@ -7,7 +7,7 @@ const partnerRoutes = require('../src/routes/partner.route.js')
 
 const app = express();
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: 'https://binge-bites-git-main-sanath-rais-projects.vercel.app',
     credentials: true
 }));
 app.use(cookieParser())
