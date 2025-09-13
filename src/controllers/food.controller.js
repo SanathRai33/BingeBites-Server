@@ -128,8 +128,6 @@ async function getUserLiked(req, res) {
     }
 }
 
-
-
 async function getUserSaved(req, res) {
     const user = req.user;
 
