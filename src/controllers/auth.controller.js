@@ -31,7 +31,11 @@ async function registerUser(req, res) {
     process.env.JWT_TOKEN
   );
 
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
+  });
 
   res.status(201).json({
     message: "User registered successfully",
@@ -71,7 +75,11 @@ async function loginUser(req, res) {
     process.env.JWT_TOKEN
   );
 
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
+  });
 
   res.status(201).json({
     message: "User logged in successfully",
@@ -83,11 +91,11 @@ async function loginUser(req, res) {
   });
 }
 
-function logoutUser(req, res){
-  res.clearCookie('token');
+function logoutUser(req, res) {
+  res.clearCookie("token");
   res.status(201).json({
-    message: "Logged out successfully"
-  })
+    message: "Logged out successfully",
+  });
 }
 
 async function registerFoodPartner(req, res) {
@@ -121,7 +129,11 @@ async function registerFoodPartner(req, res) {
     process.env.JWT_TOKEN
   );
 
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
+  });
 
   res.status(201).json({
     message: "FoodPartner registered successfully",
@@ -164,7 +176,11 @@ async function loginFoodPartner(req, res) {
     process.env.JWT_TOKEN
   );
 
-  res.cookie("token", token);
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "none",
+  });
 
   res.status(201).json({
     message: "FoodPartner logged in successfully",
@@ -179,11 +195,18 @@ async function loginFoodPartner(req, res) {
   });
 }
 
-function logoutFoodPartner(req, res){
-  res.clearCookie('token');
+function logoutFoodPartner(req, res) {
+  res.clearCookie("token");
   res.status(201).json({
-    message: "Logged out successfully"
-  })
+    message: "Logged out successfully",
+  });
 }
 
-module.exports = { registerUser, loginUser, logoutUser, registerFoodPartner, loginFoodPartner, logoutFoodPartner };
+module.exports = {
+  registerUser,
+  loginUser,
+  logoutUser,
+  registerFoodPartner,
+  loginFoodPartner,
+  logoutFoodPartner,
+};
