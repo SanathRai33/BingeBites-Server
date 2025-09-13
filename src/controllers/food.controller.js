@@ -119,14 +119,15 @@ async function getUserLiked(req, res) {
             .populate('food');
 
         res.status(200).json({
-            message: "User liked video fetched successfully",
+            message: "User liked videos fetched successfully",
             likedVideos: liked.map(item => item.food),
         });
     } catch (error) {
-        console.error("Error in fetching liked video:", error);
+        console.error("Error in fetching liked videos:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 }
+
 
 
 async function getUserSaved(req, res) {
@@ -138,7 +139,7 @@ async function getUserSaved(req, res) {
 
         res.status(200).json({
             message: "User saved video fetched successfully",
-            likedVideos: liked.map(item => item.food),
+            savedVideos: saved.map(item => item.food),
         });
     } catch (error) {
         console.error("Error in fetching saved video:", error);
