@@ -4,6 +4,7 @@ const saveModel = require("../models/save.model.js");
 const foodPartnerModel = require("../models/partner.model.js");
 const { uploadFile } = require("../services/storage.service.js");
 const { v4: uuid } = require("uuid");
+const { get } = require("mongoose");
 
 async function createFood(req, res) {
   const fileUploadResult = await uploadFile(req.file.buffer, uuid());
@@ -110,4 +111,22 @@ async function saveFood(req, res) {
   });
 }
 
-module.exports = { createFood, getFoodItems, likeFood, saveFood };
+async function getUserLiked(req, res) {
+    const user = req.user;
+
+    try {
+        const liked = await likeModel.find({ user: user })
+            .populate('food');
+
+        res.status(200).json({
+            message: "User liked video fetched successfully",
+            likedVideos: liked.map(item => item.food),
+        });
+    } catch (error) {
+        console.error("Error in fetching liked video:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+
+module.exports = { createFood, getFoodItems, likeFood, saveFood, getUserLiked };
