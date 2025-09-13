@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const { authFoodPartnerMiddleware, authUserMiddleware } = require('../middlewares/auth.middleware.js');
-const { createFood, getFoodItems, likeFood, saveFood, getUserLiked } = require('../controllers/food.controller.js');
+const { createFood, getFoodItems, likeFood, saveFood, getUserLiked, getUserSaved } = require('../controllers/food.controller.js');
 
 const upload = multer({
     storage: multer.memoryStorage(),
@@ -13,5 +13,6 @@ router.get('/get', authUserMiddleware, getFoodItems)
 router.post('/like', authUserMiddleware, likeFood)
 router.post('/save', authUserMiddleware, saveFood)
 router.get('/liked', authUserMiddleware, getUserLiked)
+router.get('/saved', authUserMiddleware, getUserSaved)
 
 module.exports = router;

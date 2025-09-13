@@ -129,4 +129,21 @@ async function getUserLiked(req, res) {
 }
 
 
-module.exports = { createFood, getFoodItems, likeFood, saveFood, getUserLiked };
+async function getUserSaved(req, res) {
+    const user = req.user;
+
+    try {
+        const saved = await saveModel.find({ user: user })
+            .populate('food');
+
+        res.status(200).json({
+            message: "User saved video fetched successfully",
+            likedVideos: liked.map(item => item.food),
+        });
+    } catch (error) {
+        console.error("Error in fetching saved video:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+module.exports = { createFood, getFoodItems, likeFood, saveFood, getUserLiked, getUserSaved };
