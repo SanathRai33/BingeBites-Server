@@ -204,7 +204,6 @@ function logoutFoodPartner(req, res) {
 
 async function checkAuth(req, res) {
   const token = req.cookies.token;
-
   if (!token) {
     return res.status(200).json({ authenticated: false });
   }
@@ -212,17 +211,19 @@ async function checkAuth(req, res) {
   try {
     const decoded = jwt.verify(token, process.env.JWT_TOKEN);
     const user = await userModel.findById(decoded.id);
-
     if (!user) {
       return res.status(200).json({ authenticated: false });
     }
 
-    res.status(200).json({ authenticated: true, user: {
-      id: user._id,
-      fullName: user.fullName,
-      email: user.email
-    }});
-  } catch (err) {
+    return res.status(200).json({
+      authenticated: true,
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+      },
+    });
+  } catch (error) {
     return res.status(200).json({ authenticated: false });
   }
 }
