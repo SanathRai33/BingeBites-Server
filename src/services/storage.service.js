@@ -14,4 +14,9 @@ async function uploadFile(file, fileName) {
     return result;   
 }
 
+async function deleteFile(fileId) {
+    const result = await imagekit.deleteFile(fileId);
+    return result;
+}
+
 module.exports = { uploadFile }

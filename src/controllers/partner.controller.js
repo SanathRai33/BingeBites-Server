@@ -23,6 +23,58 @@ const getFoodPartnerById = async (req, res) => {
     }
 };
 
+async function getProfile(req, res) {
+  const partnerId = req.partner._id;
+
+  try {
+    const partner = await partnerModel.findById(partnerId);
+    if (!partner) {
+      return res.status(404).json({ message: "Partner not found" });
+    }
+    res.status(200).json({
+      name: partner.name,
+      image: partner.image,
+    });
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function updateProfile(req, res) {
+  const partnerId = req.partner._id;
+  const { name } = req.body;
+
+  try {
+    const partner = await partnerModel.findById(partnerId);
+    if (!partner) {
+      return res.status(404).json({ message: "Partner not found" });
+    }
+
+    if (name) {
+      partner.name = name;
+    }
+
+    if (req.file) {
+      const uploadResult = await uploadFile(req.file.buffer, uuid());
+      partner.image = uploadResult.url;
+    }
+
+    await partner.save();
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      name: partner.name,
+      image: partner.image,
+    });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 module.exports = {
-    getFoodPartnerById
+    getFoodPartnerById,
+    getProfile,
+    updateProfile
 };
