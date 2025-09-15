@@ -32,10 +32,9 @@ async function registerUser(req, res) {
   );
 
   res.cookie('token', token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 7 * 24 * 60 * 60 * 1000, 
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    secure: true,
     sameSite: 'lax'
 });
 
@@ -79,10 +78,9 @@ async function loginUser(req, res) {
   );
 
   res.cookie('token', token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 7 * 24 * 60 * 60 * 1000, 
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    secure: true,
     sameSite: 'lax'
 });
 
@@ -136,10 +134,9 @@ async function registerFoodPartner(req, res) {
   );
 
   res.cookie('token', token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 7 * 24 * 60 * 60 * 1000, 
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    secure: true,
     sameSite: 'lax'
 });
 
@@ -186,10 +183,9 @@ async function loginFoodPartner(req, res) {
   );
 
   res.cookie('token', token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 7 * 24 * 60 * 60 * 1000, 
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    secure: true,
     sameSite: 'lax'
 });
 
