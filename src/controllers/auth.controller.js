@@ -31,13 +31,12 @@ async function registerUser(req, res) {
     process.env.JWT_TOKEN
   );
 
-  res.cookie('token', token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000, 
+  res.cookie("token", token, {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: 'lax'
-});
-
+    sameSite: "lax",
+  });
 
   res.status(201).json({
     message: "User registered successfully",
@@ -77,13 +76,12 @@ async function loginUser(req, res) {
     process.env.JWT_TOKEN
   );
 
-  res.cookie('token', token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000, 
+  res.cookie("token", token, {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: 'lax'
-});
-
+    sameSite: "lax",
+  });
 
   res.status(201).json({
     message: "User logged in successfully",
@@ -133,13 +131,12 @@ async function registerFoodPartner(req, res) {
     process.env.JWT_TOKEN
   );
 
-  res.cookie('token', token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000, 
+  res.cookie("token", token, {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: 'lax'
-});
-
+    sameSite: "lax",
+  });
 
   res.status(201).json({
     message: "FoodPartner registered successfully",
@@ -182,13 +179,12 @@ async function loginFoodPartner(req, res) {
     process.env.JWT_TOKEN
   );
 
-  res.cookie('token', token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000, 
+  res.cookie("token", token, {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: 'lax'
-});
-
+    sameSite: "lax",
+  });
 
   res.status(201).json({
     message: "FoodPartner logged in successfully",
@@ -210,30 +206,26 @@ function logoutFoodPartner(req, res) {
   });
 }
 
-async function checkAuth(req, res) {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(200).json({ authenticated: false });
-  }
+async function checkAuth(req, res, next) {
+    const token = req.cookies.token;
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_TOKEN);
-    const user = await userModel.findById(decoded.id);
-    if (!user) {
-      return res.status(200).json({ authenticated: false });
+    if (!token) {
+        return res.status(401).json({ message: "Authentication required" });
     }
 
-    return res.status(200).json({
-      authenticated: true,
-      user: {
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-      },
-    });
-  } catch (error) {
-    return res.status(200).json({ authenticated: false });
-  }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_TOKEN);
+        const user = await userModel.findById(decoded.id);
+
+        if (!user) {
+            return res.status(401).json({ message: "User not found" });
+        }
+
+        req.user = user;
+        next();
+    } catch (error) {
+        return res.status(401).json({ message: "Invalid token" });
+    }
 }
 
 module.exports = {
