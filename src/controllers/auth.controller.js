@@ -35,7 +35,7 @@ async function registerUser(req, res) {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "none",
   });
 
   res.status(201).json({
@@ -80,7 +80,7 @@ async function loginUser(req, res) {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "none",
   });
 
   res.status(201).json({
@@ -135,7 +135,7 @@ async function registerFoodPartner(req, res) {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "none",
   });
 
   res.status(201).json({
@@ -183,7 +183,7 @@ async function loginFoodPartner(req, res) {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "none",
   });
 
   res.status(201).json({
