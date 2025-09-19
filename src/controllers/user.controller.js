@@ -16,8 +16,12 @@ async function userProfile(req, res, next) {
       return res.status(401).json({ message: "User not found" });
     }
 
+    const userInfo = req.user;
+
     return res.status(200).json({
-      user: req.user,
+      id: userInfo._id,
+      fullName: userInfo.fullName,
+      email: userInfo.email,
       message: "User profile fetched successfully",
     });
   } catch (error) {
