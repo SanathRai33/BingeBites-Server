@@ -7,9 +7,6 @@ router.post("/user/register", registerUser)
 router.post("/user/login", loginUser)
 router.get("/user/logout", logoutUser)
 
-// Check authentication status
-router.get("/user/profile", checkAuth)
-
 // Food Partner authentication
 router.post("/foodPartner/register", registerFoodPartner)
 router.post("/foodPartner/login", loginFoodPartner)
