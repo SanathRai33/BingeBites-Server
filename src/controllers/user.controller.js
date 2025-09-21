@@ -1,33 +1,25 @@
-const userModel = require("../models/user.model.js");
-const jwt = require("jsonwebtoken");
 
-async function userProfile(req, res, next) {
-  const token = req.cookies.token;
-
-  if (!token) {
-    return res.status(401).json({ message: "Authentication required" });
-  }
-
+async function userProfile(req, res) {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_TOKEN);
-    const user = await userModel.findById(decoded.id);
+    const user = req.user;
 
     if (!user) {
       return res.status(401).json({ message: "User not found" });
     }
 
-    const userInfo = req.user;
-
     return res.status(200).json({
-      id: userInfo._id,
-      fullName: userInfo.fullName,
-      email: userInfo.email,
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+      },
       message: "User profile fetched successfully",
     });
   } catch (error) {
-    return res.status(401).json({ message: "Invalid token" });
+    return res.status(500).json({ message: "Something went wrong", error });
   }
 }
+
 
 module.exports = {
   userProfile,
