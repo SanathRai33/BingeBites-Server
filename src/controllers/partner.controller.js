@@ -43,29 +43,31 @@ async function getProfile(req, res) {
 
 async function updateProfile(req, res) {
   const partnerId = req.partner._id;
-  const { name } = req.body;
+  const { name, image } = req.body;
 
   try {
-    const partner = await partnerModel.findById(partnerId);
-    if (!partner) {
+
+    if (!partnerId) {
       return res.status(404).json({ message: "Partner not found" });
     }
 
-    if (name) {
-      partner.name = name;
-    }
+    const updatedPartner = await partnerModel.findByIdAndUpdate(
+      partnerId,
+      { name, image },
+      { new: true }
+    );
 
-    if (req.file) {
-      const uploadResult = await uploadFile(req.file.buffer, uuid());
-      partner.image = uploadResult.url;
+    if (!updatedPartner) {
+      return res.status(404).json({ message: "Partner not found" });
     }
-
-    await partner.save();
 
     res.status(200).json({
       message: "Profile updated successfully",
-      name: partner.name,
-      image: partner.image,
+      partner: {
+        _id: updatedPartner._id,
+        name: updatedPartner.name,
+        image: updatedPartner.image,
+      },
     });
   } catch (error) {
     console.error("Error updating profile:", error);

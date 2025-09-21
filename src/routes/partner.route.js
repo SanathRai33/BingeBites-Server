@@ -9,7 +9,7 @@ const upload = multer({
   storage: multer.memoryStorage(),
 });
 
-router.get('/food-partner/:id', authUserMiddleware, getFoodPartnerById);
+router.get('/profile/:id', authUserMiddleware, getFoodPartnerById);
 router.get('/profile', authFoodPartnerMiddleware, getProfile);
 router.put('/profile', authFoodPartnerMiddleware, upload.single('image'), updateProfile);
 
