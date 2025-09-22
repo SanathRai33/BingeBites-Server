@@ -24,7 +24,7 @@ const getFoodPartnerById = async (req, res) => {
 };
 
 async function getProfile(req, res) {
-  const partnerId = req.partner._id;
+  const partnerId = req.foodPartner._id;
 
   try {
     const partner = await partnerModel.findById(partnerId);
