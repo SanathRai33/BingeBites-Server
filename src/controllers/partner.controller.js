@@ -31,9 +31,15 @@ async function getProfile(req, res) {
     if (!partner) {
       return res.status(404).json({ message: "Partner not found" });
     }
+
+    const partnerDetail = req.foodPartner;
+
     res.status(200).json({
-      name: partner.name,
-      image: partner.image,
+      partner: {
+      name: partnerDetail.name,
+      image: partnerDetail.image,
+    },
+    message: "Partner profile fetched successfully",
     });
   } catch (error) {
     console.error("Error fetching profile:", error);
