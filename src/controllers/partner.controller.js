@@ -1,33 +1,34 @@
-const foodPartnerModel = require('../models/partner.model.js');
-const foodModel = require('../models/food.model.js');
+const foodPartnerModel = require("../models/partner.model.js");
+const foodModel = require("../models/food.model.js");
 
 const getFoodPartnerById = async (req, res) => {
-    try {
-        const foodPartnerId = req.params.id;
-        const foodPartner = await foodPartnerModel.findById(foodPartnerId);
-        const foodItemsByFoodPartner = await foodModel.find({ foodPartner: foodPartnerId });
+  try {
+    const foodPartnerId = req.params.id;
+    const foodPartner = await foodPartnerModel.findById(foodPartnerId);
+    const foodItemsByFoodPartner = await foodModel.find({
+      foodPartner: foodPartnerId,
+    });
 
-        if (!foodPartner) {
-            return res.status(404).json({ message: 'Food partner not found' });
-        }
-        res.status(200).json({
-            message: "Food partner retrieved successfully",
-            foodPartner: {
-                ...foodPartner.toObject(),
-                foodItems: foodItemsByFoodPartner
-            }
-        });
-    } catch (error) {
-        console.error('Error fetching food partner by ID:', error);
-        res.status(500).json({ message: 'Internal server error' });
+    if (!foodPartner) {
+      return res.status(404).json({ message: "Food partner not found" });
     }
+    res.status(200).json({
+      message: "Food partner retrieved successfully",
+      foodPartner: {
+        ...foodPartner.toObject(),
+        foodItems: foodItemsByFoodPartner,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching food partner by ID:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 async function getProfile(req, res) {
-  const partnerId = req.foodPartner._id;
-
   try {
-    const partner = await partnerModel.findById(partnerId);
+    const partnerId = req.foodPartner._id;
+    const partner = await foodPartnerModel.findById(partnerId);
     if (!partner) {
       return res.status(404).json({ message: "Partner not found" });
     }
@@ -36,10 +37,10 @@ async function getProfile(req, res) {
 
     res.status(200).json({
       partner: {
-      name: partnerDetail.name,
-      image: partnerDetail.image,
-    },
-    message: "Partner profile fetched successfully",
+        name: partnerDetail.name,
+        image: partnerDetail.image,
+      },
+      message: "Partner profile fetched successfully",
     });
   } catch (error) {
     console.error("Error fetching profile:", error);
@@ -52,7 +53,6 @@ async function updateProfile(req, res) {
   const { name, image } = req.body;
 
   try {
-
     if (!partnerId) {
       return res.status(404).json({ message: "Partner not found" });
     }
@@ -82,7 +82,7 @@ async function updateProfile(req, res) {
 }
 
 module.exports = {
-    getFoodPartnerById,
-    getProfile,
-    updateProfile
+  getFoodPartnerById,
+  getProfile,
+  updateProfile,
 };
