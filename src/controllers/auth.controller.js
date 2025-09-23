@@ -24,14 +24,14 @@ async function registerUser(req, res) {
     password: hashPassword,
   });
 
-  const token = jwt.sign(
+  const userToken = jwt.sign(
     {
       id: user._id,
     },
     process.env.JWT_TOKEN
   );
 
-  res.cookie("token", token, {
+  res.cookie("userToken", userToken, {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -69,14 +69,14 @@ async function loginUser(req, res) {
     });
   }
 
-  const token = jwt.sign(
+  const userToken = jwt.sign(
     {
       id: user._id,
     },
     process.env.JWT_TOKEN
   );
 
-  res.cookie("token", token, {
+  res.cookie("userToken", userToken, {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -94,7 +94,7 @@ async function loginUser(req, res) {
 }
 
 function logoutUser(req, res) {
-  res.clearCookie("token");
+  res.clearCookie("userToken");
   res.status(201).json({
     message: "Logged out successfully",
   });
@@ -124,14 +124,14 @@ async function registerFoodPartner(req, res) {
     password: hashPassword,
   });
 
-  const token = jwt.sign(
+  const partnerToken = jwt.sign(
     {
       id: foodPartner._id,
     },
     process.env.JWT_TOKEN
   );
 
-  res.cookie("token", token, {
+  res.cookie("partnerToken", partnerToken, {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -172,14 +172,14 @@ async function loginFoodPartner(req, res) {
     });
   }
 
-  const token = jwt.sign(
+  const partnerToken = jwt.sign(
     {
       id: foodPartner._id,
     },
     process.env.JWT_TOKEN
   );
 
-  res.cookie("token", token, {
+  res.cookie("partnerToken", partnerToken, {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -200,7 +200,7 @@ async function loginFoodPartner(req, res) {
 }
 
 function logoutFoodPartner(req, res) {
-  res.clearCookie("token");
+  res.clearCookie("partnerToken");
   res.status(201).json({
     message: "Logged out successfully",
   });

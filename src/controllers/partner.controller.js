@@ -1,5 +1,7 @@
+// ...existing code...
 const foodPartnerModel = require("../models/partner.model.js");
 const foodModel = require("../models/food.model.js");
+const { uploadFile } = require('../services/storage.service.js');
 
 const getFoodPartnerById = async (req, res) => {
   try {
@@ -37,8 +39,10 @@ async function getProfile(req, res) {
 
     res.status(200).json({
       partner: {
+        id: partnerDetail._id,
         name: partnerDetail.name,
         image: partnerDetail.image,
+        email: partnerDetail.email
       },
       message: "Partner profile fetched successfully",
     });
@@ -49,17 +53,34 @@ async function getProfile(req, res) {
 }
 
 async function updateProfile(req, res) {
-  const partnerId = req.partner._id;
-  const { name, image } = req.body;
-
   try {
+    const partnerId = req.foodPartner && req.foodPartner._id;
     if (!partnerId) {
       return res.status(404).json({ message: "Partner not found" });
     }
 
-    const updatedPartner = await partnerModel.findByIdAndUpdate(
+    const { name } = req.body;
+    const updateFields = {};
+    if (name) updateFields.name = name;
+
+    // If an image was uploaded via multer (memoryStorage)
+    if (req.file) {
+      try {
+        const uploadResult = await uploadFile(req.file.buffer, req.file.originalname, req.file.mimetype);
+        // store the image URL returned by ImageKit
+        if (uploadResult && uploadResult.url) {
+          updateFields.image = uploadResult.url;
+          // optionally store uploadResult.fileId if you want to support deletion later
+        }
+      } catch (uploadErr) {
+        console.error("ImageKit upload error:", uploadErr);
+        return res.status(500).json({ message: "Error uploading image" });
+      }
+    }
+
+    const updatedPartner = await foodPartnerModel.findByIdAndUpdate(
       partnerId,
-      { name, image },
+      updateFields,
       { new: true }
     );
 

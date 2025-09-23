@@ -3,16 +3,16 @@ const userModel = require("../models/user.model.js");
 const jwt = require("jsonwebtoken");
 
 async function authFoodPartnerMiddleware(req, res, next) {
-  const token = req.cookies.token;
+  const partnerToken = req.cookies.partnerToken;
 
-  if (!token) {
+  if (!partnerToken) {
     return res.status(401).json({
-      message: "Unauthorized token",
+      message: "Unauthorized partnerToken",
     });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_TOKEN);
+    const decoded = jwt.verify(partnerToken, process.env.JWT_TOKEN);
 
     const foodPartner = await foodPartnerModel.findById(decoded.id);
 
@@ -25,22 +25,22 @@ async function authFoodPartnerMiddleware(req, res, next) {
     next();
   } catch (err) {
     return res.status(401).json({
-      message: "Invalid token",
+      message: "Invalid partnerToken",
     });
   }
 }
 
 async function authUserMiddleware(req, res, next) {
-  const token = req.cookies.token;
+  const userToken = req.cookies.userToken;
 
-  if (!token) {
+  if (!userToken) {
     return res.status(401).json({
-      message: "Unauthorized token",
+      message: "Unauthorized userToken",
     });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_TOKEN);
+    const decoded = jwt.verify(userToken, process.env.JWT_TOKEN);
 
     const user = await userModel.findById(decoded.id);
 
@@ -49,7 +49,7 @@ async function authUserMiddleware(req, res, next) {
     next();
   } catch (err) {
     return res.status(401).json({
-      message: "Invalid token",
+      message: "Invalid userToken",
     });
   }
 }
