@@ -27,7 +27,7 @@ async function getFoodItems(req, res) {
   const partnerId = await foodItems.foodPartner;
   const partnerName = await foodPartnerModel.find(
     { partnerId },
-    { name: 1, _id: 0 }
+    { name: 1, image: 1, _id: 0 }
   );
 
   res.status(200).json({
