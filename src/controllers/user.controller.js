@@ -13,6 +13,7 @@ async function userProfile(req, res) {
         id: user._id,
         fullName: user.fullName,
         email: user.email,
+        address: user?.address || "",
       },
       message: "User profile fetched successfully",
     });
