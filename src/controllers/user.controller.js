@@ -25,13 +25,11 @@ async function updateUserProfile(req, res) {
   try {
     const { fullName, phone, address } = req.body;
 
-    const user = req.user._id;
+    const userId = req.user._id;
 
-    if (!user) {
+    if (!userId) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    const userId = req.params.id;
 
     const updatedUser = await userModel.findByIdAndUpdate(
       userId,
