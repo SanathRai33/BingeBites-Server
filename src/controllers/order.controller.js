@@ -1,10 +1,13 @@
 const orderModel = require("../models/order.model.js");
+const partnerModel = require("../models/partner.model.js"); 
+const foodModel = require("../models/food.model.js");
 
 const placeOrder = async (req, res) => {
   try {
     const user = req.user;
     const { partner, food } = req.body;
 
+    // Checking user and partner by middleware
     if (!user || !user._id) {
       return res.status(400).json({
         message: "User not authenticated. Cannot place order.",
@@ -17,13 +20,16 @@ const placeOrder = async (req, res) => {
       });
     }
 
+        // Checking food and partner by database
     const foundPartner = await partnerModel.findById(partner._id);
-    if (!foundPartner)
+    if (!foundPartner) {
       return res.status(404).json({ message: "Partner not found." });
+    }
 
     const foundFood = await foodModel.findById(food._id);
-    if (!foundFood)
+    if (!foundFood) {
       return res.status(404).json({ message: "Food item not found." });
+    }
 
     const orderData = await orderModel.create({
       user: user._id,
