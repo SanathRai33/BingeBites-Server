@@ -18,12 +18,18 @@ const userSchema = new mongoose.Schema(
       unique: true,
     },
     address: {
-      type: String,
-      // required: [true, "Address is required"],
-      minlength: [10, "Address must be at least 10 characters long"],
-      maxlength: [200, "Address cannot exceed 200 characters"],
-      trim: true,
+      street: { type: String, required: true },
+      city: { type: String, required: true },
+      state: { type: String, required: true }, 
+      pincode: { type: String, required: true }, 
+      country: { type: String, default: "India" },
+      coordinates: {
+        lat: { type: Number },
+        lon: { type: Number },
+      },
+      fullAddress: { type: String },
     },
+
     password: {
       type: String,
     },
