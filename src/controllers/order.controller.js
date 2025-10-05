@@ -1,5 +1,5 @@
 const orderModel = require("../models/order.model.js");
-const partnerModel = require("../models/partner.model.js"); 
+const partnerModel = require("../models/partner.model.js");
 const foodModel = require("../models/food.model.js");
 
 const placeOrder = async (req, res) => {
@@ -20,7 +20,7 @@ const placeOrder = async (req, res) => {
       });
     }
 
-        // Checking food and partner by database
+    // Checking food and partner by database
     const foundPartner = await partnerModel.findById(partner._id);
     if (!foundPartner) {
       return res.status(404).json({ message: "Partner not found." });
@@ -57,6 +57,25 @@ const placeOrder = async (req, res) => {
   }
 };
 
+async function getOrdersById(req, res) {
+  try {
+    const partnerId = req.foodPartner && req.foodPartner._id;
+
+    if (!partnerId) {
+      return res.status(404).json({ message: "Partner not found" });
+    }
+    
+    const orders = await orderModel.find({ foodPartner: partnerId })
+      .populate("user")
+      .populate("foodItems.food");
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 module.exports = {
   placeOrder,
+  getOrdersById,
 };

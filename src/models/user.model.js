@@ -13,15 +13,16 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      // required: [true, "Phone number is required"],
       match: [/^\d{10}$/, "Phone number must be exactly 10 digits"],
       unique: true,
     },
     address: {
       street: { type: String, required: true },
       city: { type: String, required: true },
-      state: { type: String, required: true }, 
-      pincode: { type: String, required: true }, 
+      taluk: { type: String, required: true },
+      district: { type: String, required: true },
+      state: { type: String, required: true },
+      pincode: { type: String, required: true },
       country: { type: String, default: "India" },
       coordinates: {
         lat: { type: Number },
