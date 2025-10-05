@@ -66,12 +66,12 @@ async function getOrdersById(req, res) {
     }
 
     const orders = await orderModel
-      .find({ foodPartner: partnerId })
+      .find({ partner: partnerId })
       .populate("user")
-      .populate("foodItems.food");
-    return res.status(200).json({ orders,
-      message: "Orders fetched successfully"
-     });
+      .populate("items.foodId");
+    return res
+      .status(200)
+      .json({ orders, message: "Orders fetched successfully" });
   } catch (error) {
     console.error("Error fetching orders:", error);
     res.status(500).json({ message: "Internal server error" });
