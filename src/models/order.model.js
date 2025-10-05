@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema({
     ref: "foodPartner",
     required: true,
   },
-  items: [orderItemSchema], // Array of ordered food items
+  items: [orderItemSchema],
   totalAmount: {
     type: Number,
     required: true,
