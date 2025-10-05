@@ -68,7 +68,7 @@ async function getOrdersById(req, res) {
     const orders = await orderModel
       .find({ partner: partnerId })
       .populate("user")
-      .populate("items.foodId");
+      // .populate("items.foodId");
     return res
       .status(200)
       .json({ orders, message: "Orders fetched successfully" });
